@@ -7,65 +7,33 @@ class ContaCorriente
     public decimal saldo;
     public decimal limiteDebito;
 
-    public void Sacar()
+    public bool Sacar(decimal valorSaque)
     {
-        Console.WriteLine("==================================");
-        Console.Write("Digite o valor que deseja sacar (R$): ");
-        decimal valorSaque = Convert.ToDecimal(Console.ReadLine());
-
         if (valorSaque > saldo + limiteDebito)
-        {
-            Console.WriteLine("==================================");
-            Console.WriteLine("O valor do limite de débito foi ultrapassado!");
-        }
-        else
-        {
-            saldo -= valorSaque;
-            Console.WriteLine("==================================");
-            Console.WriteLine("O valor foi sacado com sucesso!");
-
-        }
-
-        Console.WriteLine("==================================");
-        Console.Write("Digite ENTER para continuar...");
-        Console.ReadLine();
+            return false;
+        
+        saldo -= valorSaque;
+        
+        return true;
     }
-    public void Depositar()
+    public void Depositar(decimal valorDeposito)
     {
-        Console.WriteLine("==================================");
-        Console.Write("Digite o valor que deseja depositar (R$): ");
-        decimal valorDeposito = Convert.ToDecimal(Console.ReadLine());
-
         saldo += valorDeposito;
-
-        Console.WriteLine("==================================");
-        Console.WriteLine("O valor foi sacado com sucesso!");
-        Console.WriteLine("==================================");
-        Console.Write("Digite ENTER para continuar...");
-        Console.ReadLine();
     }
 
-    public void TransfTo(ContaCorriente contaDestino)
+    public bool TransfTo(ContaCorriente contaDestino, decimal valorTransferencia)
     {
-        Console.WriteLine("==================================");
-        Console.Write("Digite o valor que deseja transferir (R$): ");
-        decimal valorTransferencia = Convert.ToDecimal(Console.ReadLine());
+        bool conseguirSacar = this.Sacar(valorTransferencia);
 
-        saldo -= valorTransferencia;
-        contaDestino.saldo += valorTransferencia;
+        if(!conseguirSacar)
+            return false;
 
-        Console.WriteLine("==================================");
-        Console.WriteLine($"O valor de R${valorTransferencia} foi tranferido com sucesso!");
-        Console.WriteLine("==================================");
-        Console.Write("Digite ENTER para continuar...");
-        Console.ReadLine();
+        contaDestino.Depositar(valorTransferencia);
+
+        return true;
     }
-    public void ShowSaldo()
+    public decimal ShowSaldo()
     {
-        Console.WriteLine("==================================");
-        Console.WriteLine("O valor do saldo da conta é de (R$): " + saldo);
-        Console.WriteLine("==================================");
-        Console.Write("Digite ENTER para continuar...");
-        Console.ReadLine();
-    }
+        return saldo;
+    }  
 }
